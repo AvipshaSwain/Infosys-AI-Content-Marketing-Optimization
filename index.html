@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prompt app</title>
+    <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom right,#000607, #132041);
+        color: white;
+    }
+    .card {
+        display: none; /* hidden by default */
+        padding: 20px;
+        border: 1px solid #1e90ff;
+        border-radius: 8px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        background: rgba(0, 0, 0, 0.7);
+        font-size: 18px;
+    }
+    .gradient-text {
+        background: linear-gradient(to right, #7a99b8, #1e90ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+    }
+    input {
+        background-color: #000000;
+        color: white;
+        border: 1px solid #1e90ff;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    button {
+        background-color: #000000;
+        color: white;
+        border: 1px solid #1e90ff;
+        border-radius: 5px;
+        padding: 20px 15px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #1e90ff;
+        color: black;
+    }
+    .flex {
+        display: flex;
+        gap: 0.4rem;
+    }
+    .card h3 {
+        margin-top: 0;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .card .content {
+        margin-top: 10px;
+    }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1 class="gradient-text">NeuralTweet</h1>
+        <h2 class="gradient-text" style="text-align:center; font-size: 58px;">AI-Powered Tweet Generator</h2>
+        <div class="flex">
+            <input style="flex:1;padding:20px; font-size:20px" id="prompt" placeholder="Please enter the prompt" />
+            <button onclick="runPrompt()">Prompt</button>
+        </div>
+    </div>
+
+    <div class="flex">
+        <div class="card" id="tweet_a">
+            <h3 class="gradient-text">Tweet A</h3>
+            <div class="content"></div>
+        </div>
+        <div class="card" id="tweet_b">
+            <h3 class="gradient-text">Tweet B</h3>
+            <div class="content"></div>
+        </div>
+    </div>
+
+    <div class="card" id="prediction">
+        <h3 class="gradient-text">Prediction</h3>
+        <div class="content"></div>
+    </div>
+
+    <div class="card" id="explanation">
+        <h3 class="gradient-text">Explanation</h3>
+        <div class="content"></div>
+    </div>
+
+    <script>
+        const tweet_a = document.querySelector('#tweet_a .content');
+        const tweet_b = document.querySelector('#tweet_b .content');
+        const prediction = document.querySelector('#prediction .content');
+        const explanation = document.querySelector('#explanation .content');
+
+        const runPrompt = async() => {
+            const input = document.getElementById('prompt');
+            console.log(input.value);
+            const resp = await fetch(`http://127.0.0.1:5000/generate?prompt=${encodeURIComponent(input.value)}`);
+            const data = await resp.json();
+            console.log(data);
+
+            // Show cards
+            document.querySelectorAll('.card').forEach(card => card.style.display = "block");
+
+            // Fill content
+            tweet_a.innerHTML = data.tweet_a;
+            tweet_b.innerHTML = data.tweet_b;
+            prediction.innerHTML = data.prediction;
+            explanation.innerHTML = data.explanation;
+        }
+    </script>
+</body>
+</html>
