@@ -90,9 +90,9 @@ The output includes:
 
 User Prompt
 
-Generated Tweet 1
+Generated Tweet A
 
-Generated Tweet 2
+Generated Tweet B
 
 Predicted Better Tweet
 
